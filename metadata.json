@@ -1,0 +1,6 @@
+{
+  "name": "Loot Ledger",
+  "description": "Multi-niche expert app for estate sales, antique shops, and coin grading. Includes deep AI valuation, virtual auctions, cross-posting generators, and an interactive lead financial supervisor chat.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

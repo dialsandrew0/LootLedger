@@ -1,0 +1,47 @@
+{
+  "entities": {
+    "InventoryItem": {
+      "title": "InventoryItem",
+      "description": "An item in a user's inventory",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The item ID" },
+        "userId": { "type": "string", "description": "The owner UID" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "status": { "type": "string" },
+        "title": { "type": "string" },
+        "likelyIdentification": { "type": "string" },
+        "category": { "type": "string" },
+        "condition": { "type": "string" },
+        "purchasePrice": { "type": "number" },
+        "image": { "type": "string" },
+        "marks": { "type": "string" },
+        "notes": { "type": "string" },
+        "lowEstimate": { "type": "number" },
+        "expectedEstimate": { "type": "number" },
+        "highEstimate": { "type": "number" },
+        "expectedNetProfit": { "type": "number" },
+        "expectedROI": { "type": "number" },
+        "decision": { "type": "object" },
+        "evidenceObserved": { "type": "array" },
+        "missingVerification": { "type": "array" },
+        "comparableSearchTerms": { "type": "array" },
+        "researchRecommendation": { "type": "string" },
+        "disclaimer": { "type": "string" },
+        "assumptions": { "type": "object" },
+        "listingDraft": { "type": "object" },
+        "platformStatuses": { "type": "object" },
+        "platformUrls": { "type": "object" },
+        "activityTimeline": { "type": "array" }
+      },
+      "required": ["id", "userId", "createdAt", "updatedAt", "title"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/inventory/{itemId}": {
+      "schema": { "$ref": "#/entities/InventoryItem" },
+      "description": "User's inventory items"
+    }
+  }
+}
