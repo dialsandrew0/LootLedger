@@ -198,6 +198,8 @@ export default function InventoryView({ items, onUpdate, onDelete, onOpen }: Pro
                     <h3 className="font-display font-black tracking-tight text-primary text-lg leading-tight line-clamp-1">{item.title}</h3>
                     <button 
                       onClick={() => onDelete(item.id)}
+                      aria-label={`Delete ${item.title}`}
+                      title="Delete item"
                       className="text-muted hover:text-red-500 transition-colors p-1"
                     >
                       <Trash2 className="w-4 h-4" />

@@ -23,7 +23,7 @@ export const FieldDecisionCard: React.FC<FieldDecisionCardProps> = ({ result, sa
       case 'MARK DOWN':
         return 'bg-amber-400 text-amber-900 border-amber-500';
       case 'PASS':
-        return 'bg-red-950/200 text-primary border-red-600';
+        return 'bg-red-950/50 text-red-200 border-red-600';
       default:
         return 'bg-slate-300 text-primary border-slate-400';
     }
@@ -40,7 +40,7 @@ export const FieldDecisionCard: React.FC<FieldDecisionCardProps> = ({ result, sa
       case 'MARK DOWN':
         return 'bg-amber-400';
       case 'PASS':
-        return 'bg-red-950/200';
+        return 'bg-red-500';
       default:
         return 'bg-slate-300';
     }
@@ -60,7 +60,7 @@ export const FieldDecisionCard: React.FC<FieldDecisionCardProps> = ({ result, sa
             <p className="text-sm font-semibold text-primary mt-2 leading-snug">{decision.reasoning}</p>
           </div>
           <div className="text-right shrink-0">
-            <p className="text-[10px] font-bold text-secondary uppercase">Confidence</p>
+            <p className="text-[10px] font-bold text-secondary uppercase">AI confidence</p>
             <div className="flex items-center justify-end gap-1 mt-0.5">
               <span className={`w-2 h-2 rounded-full ${decision.confidenceLevel === 'High' ? 'bg-emerald-500' : decision.confidenceLevel === 'Medium' ? 'bg-amber-950/200' : 'bg-red-950/200'}`}></span>
               <p className="text-sm font-bold text-primary">{decision.confidenceLevel}</p>
@@ -125,6 +125,7 @@ export const FieldDecisionCard: React.FC<FieldDecisionCardProps> = ({ result, sa
           <div>
             <h4 className="text-[10px] font-bold text-blue-800 uppercase tracking-wider mb-0.5">Next Best Action</h4>
             <p className="text-sm font-semibold text-blue-900">{decision.nextBestAction}</p>
+            <p className="text-xs text-blue-800/80 mt-1">Use this as a decision aid; verify sold comps and condition before spending.</p>
           </div>
         </div>
 

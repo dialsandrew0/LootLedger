@@ -27,6 +27,11 @@
 }
 
 @layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
   body {
     @apply bg-canvas text-primary font-sans antialiased;
   }
@@ -47,6 +52,17 @@
   }
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-zinc-700;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
