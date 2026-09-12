@@ -30,20 +30,28 @@ service cloud.firestore {
              data.title is string;
     }
 
-    // Match inventory
-    match /users/{userId}/inventory/{itemId} {
-      allow read: if isOwner(userId);
-      
-      allow create: if isOwner(userId) &&
-                    isValidId(userId) &&
-                    isValidId(itemId) &&
-                    isValidInventoryItem(incoming(), userId);
-                    
-      allow update: if isOwner(userId) &&
-                    existing().userId == userId &&
-                    incoming().userId == userId; // Simple validation for now
-                    
-      allow delete: if isOwner(userId);
+    // Match user root document and subcollections
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      match /inventory/{itemId} {
+        allow read: if isOwner(userId);
+        
+        allow create: if isOwner(userId) &&
+                      isValidId(userId) &&
+                      isValidId(itemId) &&
+                      isValidInventoryItem(incoming(), userId);
+                      
+        allow update: if isOwner(userId) &&
+                      existing().userId == userId &&
+                      incoming().userId == userId;
+                      
+        allow delete: if isOwner(userId);
+      }
+
+      match /settings/{settingId} {
+        allow read, write: if isOwner(userId);
+      }
     }
   }
 }

@@ -1,10 +1,28 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      // Suppress benign [vite] websocket connection errors in sandbox where HMR is disabled
+      (function() {
+        const origError = console.error;
+        console.error = function(...args) {
+          if (typeof args[0] === 'string' && args[0].includes('[vite]')) return;
+          return origError.apply(console, args);
+        };
+        const origWarn = console.warn;
+        console.warn = function(...args) {
+          if (typeof args[0] === 'string' && args[0].includes('[vite]')) return;
+          return origWarn.apply(console, args);
+        };
+      })();
+    </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Loot Ledger</title>
+    <meta name="description" content="Multi-niche expert app for estate sales, antique shops, and coin grading. Includes deep AI valuation, virtual auctions, cross-posting generators, and an interactive lead financial supervisor chat." />
+    <meta property="og:title" content="Loot Ledger" />
+    <meta property="og:description" content="Multi-niche expert app for estate sales, antique shops, and coin grading. Includes deep AI valuation, virtual auctions, cross-posting generators, and an interactive lead financial supervisor chat." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">

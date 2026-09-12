@@ -36,12 +36,28 @@
         "activityTimeline": { "type": "array" }
       },
       "required": ["id", "userId", "createdAt", "updatedAt", "title"]
+    },
+    "UserSettings": {
+      "title": "UserSettings",
+      "description": "User preferences and default appraisal fee assumptions",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "defaultAssumptions": { "type": "object" },
+        "defaultPlatforms": { "type": "array" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["userId", "updatedAt"]
     }
   },
   "firestore": {
     "/users/{userId}/inventory/{itemId}": {
       "schema": { "$ref": "#/entities/InventoryItem" },
       "description": "User's inventory items"
+    },
+    "/users/{userId}/settings/preferences": {
+      "schema": { "$ref": "#/entities/UserSettings" },
+      "description": "User preferences and default assumptions"
     }
   }
 }

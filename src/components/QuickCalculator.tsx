@@ -16,7 +16,15 @@ export default function QuickCalculator({ defaultAssumptions, onUseForAppraisal 
   const [showAdvanced, setShowAdvanced] = useState(false);
   
   const fin = calculateFinancials(purchasePrice, expectedSalePrice, assumptions);
-  const verdictData = determineVerdict(fin.netProfit, fin.roi, 'High', [], [], assumptions);
+  const verdictData = determineVerdict(
+    fin.netProfit, 
+    fin.roi, 
+    { overall: 85, identityConfidence: 85, marketEvidenceQuality: 85, photoConditionQuality: 85, categoryKnowledge: 85, verificationCompleteness: 85, rating: 'High Confidence', formula: 'Manual user projection' },
+    { overall: 15, brandCategoryExposure: 10, serialHallmarkUncertainty: 15, traitMismatch: 10, provenanceDocumentationGap: 20, rating: 'Low Risk', formula: 'Manual user projection', isCounterfeitProneBrand: false },
+    [], 
+    [], 
+    assumptions
+  );
   
   return (
     <div className="bg-surface border border-subtle rounded-none p-4 sm:p-5  space-y-4">
