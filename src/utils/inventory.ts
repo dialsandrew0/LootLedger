@@ -11,7 +11,7 @@ export async function fetchInventory(): Promise<InventoryItem[]> {
     return snapshot.docs.map(doc => doc.data() as InventoryItem);
   } catch (err) {
     console.error("Error fetching inventory", err);
-    return [];
+    throw err;
   }
 }
 

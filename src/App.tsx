@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Camera, FileText, Tag, Archive, Loader2, Info, Copy, Check, Calculator, Search, Upload, X, ChevronDown, ChevronRight, AlertCircle } from 'lucide-react';
+import { Camera, FileText, Tag, Archive, Loader2, Info, Copy, Check, Calculator, Search, Upload, X, ChevronDown, ChevronRight, AlertCircle, TrendingUp } from 'lucide-react';
 import { ProfitAssumptions, ValuationResult, InventoryItem, NavItem } from './types';
 import { fetchInventory, saveInventoryItemFirebase, deleteInventoryItemFirebase, updateInventoryItemFirebase } from './utils/inventory';
 import { useAuth } from './contexts/AuthContext';
@@ -57,7 +57,9 @@ export default function App() {
 
   useEffect(() => {
     if (user) {
-      fetchInventory().then(setInventory);
+      fetchInventory()
+        .then(setInventory)
+        .catch(() => setError('We could not load your inventory. Please try again.'));
     } else {
       setInventory([]); // clear inventory on logout
     }
@@ -125,6 +127,10 @@ export default function App() {
 
   const handleSaveToInventory = () => {
     if (!result) return;
+    if (!user) {
+      setError('Sign in to save this item to your inventory. Your appraisal is still available in this session.');
+      return;
+    }
     
     const fin = calculateFinancials(purchasePrice, result.pricing.expectedSale, assumptions);
     
@@ -132,7 +138,7 @@ export default function App() {
       id: Math.random().toString(36).substr(2, 9),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      status: 'Needs Research',
+      status: result.decision.recommendation === 'PASS' ? 'Passed' : 'Needs Research',
       title: result.identification.title,
       likelyIdentification: result.likelyIdentification,
       category: category,
@@ -159,16 +165,16 @@ export default function App() {
       activityTimeline: [{ date: new Date().toISOString(), action: 'Sourced via Scan' }]
     };
     
-    if (user) {
-      saveInventoryItemFirebase(newItem).then(() => {
-        fetchInventory().then(setInventory);
-      });
-    }
-    setSaveSuccess(true);
-    
-    setTimeout(() => {
-      setActiveNav('Inventory');
-    }, 1500);
+    saveInventoryItemFirebase(newItem)
+      .then(() => fetchInventory())
+      .then((updated) => {
+        setInventory(updated);
+        setSaveSuccess(true);
+        setTimeout(() => {
+          setActiveNav('Inventory');
+        }, 1500);
+      })
+      .catch(() => setError('We could not save this item. Please try again.'));
   };
 
   const loadItemToWorkspace = (item: InventoryItem) => {
@@ -301,6 +307,27 @@ export default function App() {
         </div>
       </header>
 
+      {error && activeNav !== 'Scan' && (
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="fixed left-4 right-4 top-24 z-40 mx-auto max-w-xl rounded-xl border border-red-400/50 bg-red-950/95 px-4 py-3 text-sm font-medium text-red-100 shadow-2xl"
+        >
+          <div className="flex items-start gap-2">
+            <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
+            <p>{error}</p>
+            <button
+              type="button"
+              aria-label="Dismiss error"
+              onClick={() => setError(null)}
+              className="ml-auto text-red-200 hover:text-white"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
       <main className="max-w-6xl mx-auto px-4 py-4 sm:py-8">
         
         {/* SCAN TAB */}
@@ -357,7 +384,7 @@ export default function App() {
                       <p className="text-sm text-secondary text-center max-w-xs">Capture a clear photo of the item, plus any marks, signatures, or labels.</p>
                     </div>
                   )}
-                  <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageUpload} className="hidden" />
+                  <input type="file" accept="image/*" capture="environment" ref={fileInputRef} onChange={handleImageUpload} className="hidden" />
                 </div>
                 
                 {error && (
@@ -540,7 +567,10 @@ export default function App() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Valuation */}
                       <div className="card-3d p-4  space-y-3">
-                        <h3 className="text-[10px] font-bold tracking-tight text-secondary uppercase tracking-wider mb-2">Market Valuation</h3>
+                        <div className="mb-2">
+                          <h3 className="text-[10px] font-bold tracking-tight text-secondary uppercase tracking-wider">AI market estimate</h3>
+                          <p className="mt-1 text-[11px] text-muted">Range to validate against recent sold comps.</p>
+                        </div>
                         <div className="flex justify-between items-center text-sm">
                           <span className="text-secondary">Low End (Quick Sale)</span>
                           <span className="font-mono text-accent">${result.pricing.lowSale}</span>
@@ -605,10 +635,11 @@ export default function App() {
       {/* Mobile Bottom Navigation */}
       <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-subtle z-40 pb-safe ">
         <nav className="flex justify-around items-center p-1">
-          {(['Scan', 'Results', 'Listing', 'Inventory'] as NavItem[]).map((nav) => (
+          {(['Scan', 'Results', 'Listing', 'Inventory', 'Analytics'] as NavItem[]).map((nav) => (
             <button
               key={nav}
               onClick={() => setActiveNav(nav)}
+              aria-label={`Open ${nav}`}
               className={`flex-1 flex flex-col items-center py-2.5 px-1 rounded-lg transition-colors ${
                 activeNav === nav 
                   ? 'text-accent' 
@@ -619,6 +650,7 @@ export default function App() {
               {nav === 'Results' && <FileText className="w-5 h-5 mb-1" />}
               {nav === 'Listing' && <Tag className="w-5 h-5 mb-1" />}
               {nav === 'Inventory' && <Archive className="w-5 h-5 mb-1" />}
+              {nav === 'Analytics' && <TrendingUp className="w-5 h-5 mb-1" />}
               <span className="text-[10px] font-bold tracking-tight uppercase tracking-wide">{nav}</span>
             </button>
           ))}

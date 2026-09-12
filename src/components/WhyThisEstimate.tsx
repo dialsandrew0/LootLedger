@@ -17,7 +17,7 @@ export default function WhyThisEstimate({ result }: Props) {
       >
         <div className="flex items-center gap-2">
           <Info className="w-5 h-5 text-accent" />
-          <span>Why this estimate?</span>
+          <span>Why this estimate? <span className="font-normal text-secondary">See the evidence and what to verify.</span></span>
         </div>
         {isOpen ? <ChevronDown className="w-5 h-5 text-muted" /> : <ChevronRight className="w-5 h-5 text-muted" />}
       </button>

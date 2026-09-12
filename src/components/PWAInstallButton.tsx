@@ -38,6 +38,7 @@ export const PWAInstallButton: React.FC = () => {
             <div className="w-full max-w-sm border border-subtle bg-surface p-6 shadow-2xl relative">
               <button 
                 onClick={() => setShowIOSGuide(false)}
+                aria-label="Close installation instructions"
                 className="absolute top-4 right-4 text-secondary hover:text-primary"
               >
                 <X className="w-5 h-5" />
